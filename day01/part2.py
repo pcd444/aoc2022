@@ -7,34 +7,28 @@ import pytest
 
 import support
 
+import heapq
+
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
+
 def compute(s: str) -> int:
-    ns = sorted(
-        sum(int(line) for line in part.splitlines())
-        for part in s.split('\n\n')
-    )
-    return sum(ns[-3:])
+    top3 = [0,0,0]
+    s = s[0:-1]
+    for elf_list in s.split('\n\n'):
+        elf_sum = 0
+        for line in elf_list.split('\n'):
+            elf_sum += int(line)
+        heapq.heappushpop(top3,elf_sum)
+    return sum(top3)
+
 
 
 INPUT_S = '''\
-1000
-2000
-3000
 
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000
 '''
-EXPECTED = 45000
+EXPECTED = 1
 
 
 @pytest.mark.parametrize(
